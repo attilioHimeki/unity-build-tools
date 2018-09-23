@@ -107,7 +107,7 @@ public class EnhancedBuildsWindow : EditorWindow
 
             if (GUILayout.Button("Add Entry", GUILayout.ExpandWidth(true))) 
             {
-                addBuildSetupEntry();
+                buildSetup.addBuildSetupEntry();
             }
 
             GUILayout.Space(10);
@@ -198,7 +198,7 @@ public class EnhancedBuildsWindow : EditorWindow
 
         if (GUILayout.Button("Remove Entry", GUILayout.ExpandWidth(false))) 
         {
-            deleteEntry(b);
+            buildSetup.deleteBuildSetupEntry(b);
         }
         
         GUILayout.Space(10);
@@ -257,18 +257,5 @@ public class EnhancedBuildsWindow : EditorWindow
         }
     }
 
-    private void addBuildSetupEntry () 
-    {
-        BuildSetupEntry buildEntry = new BuildSetupEntry();
-        buildEntry.buildName = Application.productName;
-        buildEntry.target = EditorUserBuildSettings.activeBuildTarget;
-        buildEntry.customScenes = new List<string>();
-        buildSetup.entriesList.Add (buildEntry);
-    }
-    
-    private void deleteEntry(BuildSetupEntry entry) 
-    {
-        buildSetup.entriesList.Remove (entry);
-    }
 
 }

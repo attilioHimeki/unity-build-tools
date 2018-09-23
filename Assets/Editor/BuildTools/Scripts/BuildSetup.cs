@@ -19,4 +19,19 @@ public class BuildSetup : ScriptableObject
         AssetDatabase.SaveAssets();
         return asset;
     }
+
+    public void addBuildSetupEntry () 
+    {
+        BuildSetupEntry buildEntry = new BuildSetupEntry();
+        buildEntry.buildName = Application.productName;
+        buildEntry.target = EditorUserBuildSettings.activeBuildTarget;
+        buildEntry.customScenes = new List<string>();
+
+        entriesList.Add(buildEntry);
+    }
+
+    public void deleteBuildSetupEntry(BuildSetupEntry entry) 
+    {
+        entriesList.Remove (entry);
+    }
 }
