@@ -4,7 +4,7 @@ using System.Collections.Generic;
 public static class BuildUtils
 {
 
-    public const string SETUPS_REL_DIRECTORY = "Assets/Editor/BuildTools/Setups/";
+    public const string SETUPS_REL_DIRECTORY = "Assets/Editor/BuildTools/";
     public static BuildPlayerOptions getBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
     {
         var buildPlayerOptions = new BuildPlayerOptions();
@@ -36,6 +36,14 @@ public static class BuildUtils
         {
             buildOptions |= BuildOptions.StrictMode;
         }
+        if(setupEntry.target == BuildTarget.iOS)
+        {
+            if(setupEntry.iosSymlinkLibraries)
+            {
+                buildOptions |= BuildOptions.SymlinkLibraries;
+            }
+        }
+
         buildPlayerOptions.options = buildOptions;
 
         return buildPlayerOptions;

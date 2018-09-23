@@ -15,6 +15,7 @@ public class BuildSetupEntry
 	// Advanced Options
 	public string assetBundleManifestPath = "";
 	public bool strictMode = false;
+	public bool iosSymlinkLibraries = false;
 
 	// GUI status
 	[NonSerialized] public bool guiShowCustomScenes = false;

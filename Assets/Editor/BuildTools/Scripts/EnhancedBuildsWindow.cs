@@ -147,7 +147,7 @@ public class EnhancedBuildsWindow : EditorWindow
         b.debugBuild = EditorGUILayout.Toggle("Debug Build", b.debugBuild);
         b.scriptingDefineSymbols = EditorGUILayout.TextField("Scripting Define Symbols", b.scriptingDefineSymbols);
         b.useDefaultBuildScenes = EditorGUILayout.Toggle("Use Default Build Scenes", b.useDefaultBuildScenes);
-
+    
         if(!b.useDefaultBuildScenes)
         {
             b.guiShowCustomScenes = EditorGUILayout.Foldout(b.guiShowCustomScenes, "Custom Scenes");
@@ -195,6 +195,10 @@ public class EnhancedBuildsWindow : EditorWindow
             EditorGUI.indentLevel++;
             b.strictMode = EditorGUILayout.Toggle("Strict Mode", b.strictMode);
             b.assetBundleManifestPath = EditorGUILayout.TextField("AssetBundle Manifest Path", b.assetBundleManifestPath);
+            if(b.target == BuildTarget.iOS)
+            {
+                b.iosSymlinkLibraries = EditorGUILayout.Toggle("XCode - Symlink Library", b.iosSymlinkLibraries);
+            }
             EditorGUI.indentLevel--;
         }
 
