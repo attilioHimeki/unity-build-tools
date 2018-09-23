@@ -3,15 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using System.Diagnostics;
-using UnityEditor.Build.Reporting;
  
 [Serializable]
 public class BuildSetup : ScriptableObject 
 {
-    [SerializeField] public string rootDirectory = "";
+    public string rootDirectory = "";
 
-    [SerializeField] public List<BuildSetupEntry> itemList;
+    public List<BuildSetupEntry> entriesList;
 
 	[MenuItem("Assets/Create/BuildSetup")]
     public static BuildSetup Create()

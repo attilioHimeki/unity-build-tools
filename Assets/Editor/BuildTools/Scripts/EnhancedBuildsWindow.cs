@@ -68,13 +68,13 @@ public class EnhancedBuildsWindow : EditorWindow
         GUILayout.Space(20);
 
         EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-
-        GUILayout.Label ("Loaded Build Setup", EditorStyles.boldLabel);
-
-        GUILayout.Space(20);
             
         if (buildSetup != null) 
         {
+            GUILayout.Label ("Loaded Build Setup", EditorStyles.boldLabel);
+
+            GUILayout.Space(20);
+
             EditorGUIUtility.labelWidth = 200f;
             if (GUILayout.Button("Choose Root Directory", GUILayout.ExpandWidth(false))) 
             {
@@ -86,11 +86,11 @@ public class EnhancedBuildsWindow : EditorWindow
             GUILayout.Label ("Builds", EditorStyles.label);
             GUILayout.Space(10);
 
-            if (buildSetup.itemList.Count > 0) 
+            if (buildSetup.entriesList.Count > 0) 
             {
                 buildEntriesListScrollPos = EditorGUILayout.BeginScrollView(buildEntriesListScrollPos, false, false, GUILayout.Width(position.width), GUILayout.MaxHeight(500));
         
-                var list = buildSetup.itemList;
+                var list = buildSetup.entriesList;
                 for(var i = 0; i < list.Count; i++)
                 {
                     var b = list[i];
@@ -129,6 +129,10 @@ public class EnhancedBuildsWindow : EditorWindow
             {
                 GUILayout.Label ("Define a Root directory and at least one build entry");
             }
+        }
+        else
+        {
+            GUILayout.Label ("Select or Create a new Build Setup", EditorStyles.boldLabel);
         }
         if (GUI.changed) 
         {
@@ -208,7 +212,7 @@ public class EnhancedBuildsWindow : EditorWindow
 
         string path = buildSetup.rootDirectory;
 
-        var setupList = buildSetup.itemList;
+        var setupList = buildSetup.entriesList;
         for(var i = 0; i < setupList.Count; i++)
         {
             var setup = setupList[i];
@@ -235,7 +239,7 @@ public class EnhancedBuildsWindow : EditorWindow
         buildSetup = BuildSetup.Create();
         if (buildSetup) 
         {
-            buildSetup.itemList = new List<BuildSetupEntry>();
+            buildSetup.entriesList = new List<BuildSetupEntry>();
             string relPath = AssetDatabase.GetAssetPath(buildSetup);
             EditorPrefs.SetString(EDITOR_PREFS_KEY, relPath);
         }
@@ -247,8 +251,8 @@ public class EnhancedBuildsWindow : EditorWindow
         {
             string relPath = absPath.Substring(Application.dataPath.Length - "Assets".Length);
             buildSetup = AssetDatabase.LoadAssetAtPath (relPath, typeof(BuildSetup)) as BuildSetup;
-            if (buildSetup.itemList == null)
-                buildSetup.itemList = new List<BuildSetupEntry>();
+            if (buildSetup.entriesList == null)
+                buildSetup.entriesList = new List<BuildSetupEntry>();
             if (buildSetup) {
                 EditorPrefs.SetString(EDITOR_PREFS_KEY, relPath);
             }
@@ -261,12 +265,12 @@ public class EnhancedBuildsWindow : EditorWindow
         buildEntry.buildName = Application.productName;
         buildEntry.target = EditorUserBuildSettings.activeBuildTarget;
         buildEntry.customScenes = new List<string>();
-        buildSetup.itemList.Add (buildEntry);
+        buildSetup.entriesList.Add (buildEntry);
     }
     
     private void deleteEntry(BuildSetupEntry entry) 
     {
-        buildSetup.itemList.Remove (entry);
+        buildSetup.entriesList.Remove (entry);
     }
 
 }

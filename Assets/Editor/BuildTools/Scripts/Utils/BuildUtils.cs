@@ -11,7 +11,7 @@ public static class BuildUtils
     public static bool canBuildGameFromSetup(BuildSetup buildSetup)
     {
         var hasPath = !string.IsNullOrEmpty(buildSetup.rootDirectory);
-        var hasEntries = buildSetup.itemList.Count > 0;
+        var hasEntries = buildSetup.entriesList.Count > 0;
 
         return hasPath && hasEntries;
     }
