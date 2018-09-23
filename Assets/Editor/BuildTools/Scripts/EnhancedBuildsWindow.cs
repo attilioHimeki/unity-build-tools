@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEditor;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEditor.Build.Reporting;
@@ -27,7 +26,6 @@ public class EnhancedBuildsWindow : EditorWindow
             string objectPath = EditorPrefs.GetString(EDITOR_PREFS_KEY);
             buildSetup = AssetDatabase.LoadAssetAtPath (objectPath, typeof(BuildSetup)) as BuildSetup;
         }
-        
     }
 
     void  OnGUI () 

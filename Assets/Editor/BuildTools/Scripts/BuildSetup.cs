@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
@@ -11,7 +10,7 @@ public class BuildSetup : ScriptableObject
 
     public List<BuildSetupEntry> entriesList;
 
-	[MenuItem("Assets/Create/BuildSetup")]
+	[MenuItem("Builds/Create/BuildSetup")]
     public static BuildSetup Create()
     {
         BuildSetup asset = ScriptableObject.CreateInstance<BuildSetup>();
