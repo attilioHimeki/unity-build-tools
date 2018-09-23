@@ -34,4 +34,12 @@ public class BuildSetup : ScriptableObject
     {
         entriesList.Remove (entry);
     }
+
+    public bool isReady()
+    {
+        var hasPath = !string.IsNullOrEmpty(rootDirectory);
+        var hasEntries = entriesList.Count > 0;
+
+        return hasPath && hasEntries;
+    }
 }

@@ -114,7 +114,7 @@ public class EnhancedBuildsWindow : EditorWindow
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            if(BuildUtils.canBuildGameFromSetup(buildSetup))
+            if(buildSetup.isReady())
             {
                 GUILayout.Space(10);
 

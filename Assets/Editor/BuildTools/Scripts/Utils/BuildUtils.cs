@@ -5,14 +5,6 @@ public static class BuildUtils
 {
 
     public const string SETUPS_REL_DIRECTORY = "Assets/Editor/BuildTools/Setups/";
-
-    public static bool canBuildGameFromSetup(BuildSetup buildSetup)
-    {
-        var hasPath = !string.IsNullOrEmpty(buildSetup.rootDirectory);
-        var hasEntries = buildSetup.entriesList.Count > 0;
-
-        return hasPath && hasEntries;
-    }
     public static BuildPlayerOptions getBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
     {
         var buildPlayerOptions = new BuildPlayerOptions();
