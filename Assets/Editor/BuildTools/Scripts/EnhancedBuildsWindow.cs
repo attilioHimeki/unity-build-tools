@@ -80,11 +80,13 @@ public class EnhancedBuildsWindow : EditorWindow
             }
             EditorGUILayout.LabelField("Root Directory", buildSetup.rootDirectory);
             
+            int buildsAmount = buildSetup.entriesList.Count;
+            
             GUILayout.Space(20);
-            GUILayout.Label ("Builds", EditorStyles.label);
+            GUILayout.Label ("Builds (" + buildsAmount + ")", EditorStyles.label);
             GUILayout.Space(10);
 
-            if (buildSetup.entriesList.Count > 0) 
+            if (buildsAmount > 0) 
             {
                 buildEntriesListScrollPos = EditorGUILayout.BeginScrollView(buildEntriesListScrollPos, false, false, GUILayout.Width(position.width), GUILayout.MaxHeight(500));
         
@@ -249,9 +251,9 @@ public class EnhancedBuildsWindow : EditorWindow
         {
             string relPath = absPath.Substring(Application.dataPath.Length - "Assets".Length);
             buildSetup = AssetDatabase.LoadAssetAtPath (relPath, typeof(BuildSetup)) as BuildSetup;
-            if (buildSetup.entriesList == null)
-                buildSetup.entriesList = new List<BuildSetupEntry>();
-            if (buildSetup) {
+
+            if (buildSetup) 
+            {
                 EditorPrefs.SetString(EDITOR_PREFS_KEY, relPath);
             }
         }
