@@ -15,16 +15,32 @@ public class EnhancedBuildsWindow : EditorWindow
     static void Init()
     {
         EnhancedBuildsWindow window = (EnhancedBuildsWindow)EditorWindow.GetWindow(typeof(EnhancedBuildsWindow), false, WINDOW_TITLE, true);
-
+        
         window.Show();
     }
 
     void OnEnable () 
     {
+        Undo.undoRedoPerformed += onUndoRedo;
+
         if(EditorPrefs.HasKey(EDITOR_PREFS_KEY)) 
         {
             string objectPath = EditorPrefs.GetString(EDITOR_PREFS_KEY);
             buildSetup = AssetDatabase.LoadAssetAtPath (objectPath, typeof(BuildSetup)) as BuildSetup;
+        }
+    }
+
+    void OnDisable () 
+    {
+        Undo.undoRedoPerformed -= onUndoRedo;
+    }
+
+    private void onUndoRedo()
+    {
+        if(buildSetup)
+        {
+            EditorUtility.SetDirty(buildSetup);
+            Repaint();
         }
     }
 
@@ -76,6 +92,7 @@ public class EnhancedBuildsWindow : EditorWindow
             EditorGUIUtility.labelWidth = 200f;
             if (GUILayout.Button("Choose Root Directory", GUILayout.ExpandWidth(false))) 
             {
+                Undo.RecordObject(buildSetup, "Set Build Setup Root Directory");
                 buildSetup.rootDirectory = EditorUtility.SaveFolderPanel("Choose Location", "", "");
             }
             EditorGUILayout.LabelField("Root Directory", buildSetup.rootDirectory);
@@ -109,6 +126,7 @@ public class EnhancedBuildsWindow : EditorWindow
 
             if (GUILayout.Button("Add Entry", GUILayout.ExpandWidth(true))) 
             {
+                Undo.RecordObject(buildSetup, "Add Build Setup Entry");
                 buildSetup.addBuildSetupEntry();
             }
 
@@ -173,6 +191,7 @@ public class EnhancedBuildsWindow : EditorWindow
                         }
                         if (GUILayout.Button("Remove Scene", GUILayout.ExpandWidth(false))) 
                         {
+                            Undo.RecordObject(buildSetup, "Remove Build Setup Entry Custom scene");
                             b.customScenes.RemoveAt(i);
                             i--;
                         }
@@ -182,6 +201,7 @@ public class EnhancedBuildsWindow : EditorWindow
                 }
                 if (GUILayout.Button("Add Scene", GUILayout.ExpandWidth(false))) 
                 {
+                    Undo.RecordObject(buildSetup, "Add Build Setup Entry Custom scene");
                     b.customScenes.Add(string.Empty);
                 }
 
@@ -205,6 +225,7 @@ public class EnhancedBuildsWindow : EditorWindow
 
         if (GUILayout.Button("Remove Entry", GUILayout.ExpandWidth(false))) 
         {
+            Undo.RecordObject(buildSetup, "Removed Build Setup Entry");
             buildSetup.deleteBuildSetupEntry(b);
         }
         
@@ -260,10 +281,11 @@ public class EnhancedBuildsWindow : EditorWindow
         if (absPath.StartsWith(Application.dataPath)) 
         {
             string relPath = absPath.Substring(Application.dataPath.Length - "Assets".Length);
-            buildSetup = AssetDatabase.LoadAssetAtPath (relPath, typeof(BuildSetup)) as BuildSetup;
+            var loadedBuildAsset = AssetDatabase.LoadAssetAtPath (relPath, typeof(BuildSetup)) as BuildSetup;
 
-            if (buildSetup) 
+            if (loadedBuildAsset) 
             {
+                buildSetup = loadedBuildAsset;
                 EditorPrefs.SetString(EDITOR_PREFS_KEY, relPath);
             }
         }
