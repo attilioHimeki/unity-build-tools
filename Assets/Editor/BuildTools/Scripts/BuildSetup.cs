@@ -23,9 +23,13 @@ public class BuildSetup : ScriptableObject
     public void addBuildSetupEntry () 
     {
         BuildSetupEntry buildEntry = new BuildSetupEntry();
+
+        var currentBuildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
+        
         buildEntry.buildName = Application.productName;
         buildEntry.target = EditorUserBuildSettings.activeBuildTarget;
         buildEntry.customScenes = new List<string>();
+        buildEntry.scriptingBackend = PlayerSettings.GetScriptingBackend(currentBuildTargetGroup);
 
         entriesList.Add(buildEntry);
     }

@@ -199,6 +199,7 @@ public class EnhancedBuildsWindow : EditorWindow
             {
                 b.iosSymlinkLibraries = EditorGUILayout.Toggle("XCode - Symlink Library", b.iosSymlinkLibraries);
             }
+            b.scriptingBackend = (ScriptingImplementation)EditorGUILayout.EnumPopup ("Scripting Backend", b.scriptingBackend);
             EditorGUI.indentLevel--;
         }
 
@@ -223,6 +224,9 @@ public class EnhancedBuildsWindow : EditorWindow
             var target = setup.target;
             var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
 
+            var originalScriptingBackend = PlayerSettings.GetScriptingBackend(targetGroup);
+            PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
+
             var originalDefines = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
             PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
 
@@ -233,7 +237,9 @@ public class EnhancedBuildsWindow : EditorWindow
 
             UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
 
+            // Revert group build player settings after building
             PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, originalDefines);
+            PlayerSettings.SetScriptingBackend(targetGroup, originalScriptingBackend);
         }
 
     }

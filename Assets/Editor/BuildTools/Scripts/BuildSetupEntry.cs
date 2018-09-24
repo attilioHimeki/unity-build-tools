@@ -16,8 +16,10 @@ public class BuildSetupEntry
 	public string assetBundleManifestPath = "";
 	public bool strictMode = false;
 	public bool iosSymlinkLibraries = false;
+	public ScriptingImplementation scriptingBackend;
 
 	// GUI status
 	[NonSerialized] public bool guiShowCustomScenes = false;
 	[NonSerialized] public bool guiShowAdvancedOptions = false;
+
 }
