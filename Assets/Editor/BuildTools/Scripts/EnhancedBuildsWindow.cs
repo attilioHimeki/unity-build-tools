@@ -238,6 +238,8 @@ public class EnhancedBuildsWindow : EditorWindow
 
         string path = buildSetup.rootDirectory;
 
+        var playerSettingsSnapshot = new PlayerSettingsSnapshot();
+
         var setupList = buildSetup.entriesList;
         for(var i = 0; i < setupList.Count; i++)
         {
@@ -245,10 +247,9 @@ public class EnhancedBuildsWindow : EditorWindow
             var target = setup.target;
             var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
 
-            var originalScriptingBackend = PlayerSettings.GetScriptingBackend(targetGroup);
-            PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
+            playerSettingsSnapshot.takeSnapshot(targetGroup);
 
-            var originalDefines = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
+            PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
             PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
 
             var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
@@ -259,8 +260,7 @@ public class EnhancedBuildsWindow : EditorWindow
             UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
 
             // Revert group build player settings after building
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, originalDefines);
-            PlayerSettings.SetScriptingBackend(targetGroup, originalScriptingBackend);
+            playerSettingsSnapshot.applySnapshot();
         }
 
     }
