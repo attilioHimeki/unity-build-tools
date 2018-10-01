@@ -19,6 +19,7 @@ public class BuildSetupEntry
 	public ScriptingImplementation scriptingBackend;
 
 	// GUI status
+	[NonSerialized] public bool guiShowOptions = true;
 	[NonSerialized] public bool guiShowCustomScenes = false;
 	[NonSerialized] public bool guiShowAdvancedOptions = false;
 

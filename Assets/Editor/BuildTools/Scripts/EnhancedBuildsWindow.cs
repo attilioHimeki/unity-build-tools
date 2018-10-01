@@ -111,8 +111,14 @@ public class EnhancedBuildsWindow : EditorWindow
                 for(var i = 0; i < list.Count; i++)
                 {
                     var b = list[i];
-                    drawBuildEntryGUI(b);
-                }   
+                    b.guiShowOptions = EditorGUILayout.Foldout(b.guiShowOptions, b.buildName, EditorStyles.foldout);
+                    if(b.guiShowOptions)
+                    {
+                        EditorGUI.indentLevel++;
+                        drawBuildEntryGUI(b);
+                        EditorGUI.indentLevel--;
+                    }   
+                }
 
                 EditorGUILayout.EndScrollView();
             
