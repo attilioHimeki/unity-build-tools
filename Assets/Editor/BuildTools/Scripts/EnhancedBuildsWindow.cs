@@ -2,7 +2,9 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Diagnostics;
+#if UNITY_2018_OR_NEWER
 using UnityEditor.Build.Reporting;
+#endif
 
 public class EnhancedBuildsWindow : EditorWindow
 {
@@ -260,10 +262,15 @@ public class EnhancedBuildsWindow : EditorWindow
 
             var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 
+            #if UNITY_2018_OR_NEWER
             BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
             BuildSummary buildSummary = report.summary;
-
             UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
+            #else
+            var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
+            var success = string.IsNullOrEmpty(result);
+            UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Success: " + success);
+            #endif
 
             // Revert group build player settings after building
             playerSettingsSnapshot.applySnapshot();
