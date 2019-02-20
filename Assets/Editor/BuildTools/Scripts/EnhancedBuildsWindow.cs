@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Diagnostics;
-#if UNITY_2018_OR_NEWER
+#if UNITY_2018_1_OR_NEWER
 using UnityEditor.Build.Reporting;
 #endif
 
@@ -262,7 +262,7 @@ public class EnhancedBuildsWindow : EditorWindow
 
             var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 
-            #if UNITY_2018_OR_NEWER
+            #if UNITY_2018_1_OR_NEWER
             BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
             BuildSummary buildSummary = report.summary;
             UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
