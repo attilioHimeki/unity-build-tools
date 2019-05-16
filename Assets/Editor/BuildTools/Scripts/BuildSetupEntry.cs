@@ -13,6 +13,7 @@ public class BuildSetupEntry
 	public List<string> customScenes;
 
 	// Advanced Options
+	public ManagedStrippingLevel strippingLevel;
 	public string assetBundleManifestPath = "";
 	public bool strictMode = false;
 	public bool iosSymlinkLibraries = false;

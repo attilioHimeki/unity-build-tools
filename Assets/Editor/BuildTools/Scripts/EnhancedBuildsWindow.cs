@@ -221,7 +221,10 @@ public class EnhancedBuildsWindow : EditorWindow
         if(b.guiShowAdvancedOptions)
         {
             EditorGUI.indentLevel++;
-            b.strictMode = EditorGUILayout.Toggle("Strict Mode", b.strictMode);
+            b.strippingLevel = (ManagedStrippingLevel)EditorGUILayout.EnumPopup ("Stripping Level", b.strippingLevel);
+            b.strictMode = EditorGUILayout.Toggle(new GUIContent("Strict Mode", 
+                                                "Do not allow the build to succeed if any errors are reported."), 
+                                                b.strictMode);
             b.assetBundleManifestPath = EditorGUILayout.TextField("AssetBundle Manifest Path", b.assetBundleManifestPath);
             if(b.target == BuildTarget.iOS)
             {
@@ -259,6 +262,7 @@ public class EnhancedBuildsWindow : EditorWindow
 
             PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
             PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
+            PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
 
             var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 
