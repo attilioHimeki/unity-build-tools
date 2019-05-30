@@ -13,7 +13,9 @@ public class BuildSetupEntry
 	public List<string> customScenes;
 
 	// Advanced Options
+	#if UNITY_2018_3_OR_NEWER
 	public ManagedStrippingLevel strippingLevel;
+	#endif
 	public string assetBundleManifestPath = "";
 	public bool strictMode = false;
 	public bool iosSymlinkLibraries = false;

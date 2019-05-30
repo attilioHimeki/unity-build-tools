@@ -221,7 +221,11 @@ public class EnhancedBuildsWindow : EditorWindow
         if(b.guiShowAdvancedOptions)
         {
             EditorGUI.indentLevel++;
+
+            #if UNITY_2018_3_OR_NEWER
             b.strippingLevel = (ManagedStrippingLevel)EditorGUILayout.EnumPopup ("Stripping Level", b.strippingLevel);
+            #endif
+
             b.strictMode = EditorGUILayout.Toggle(new GUIContent("Strict Mode", 
                                                 "Do not allow the build to succeed if any errors are reported."), 
                                                 b.strictMode);
@@ -262,7 +266,10 @@ public class EnhancedBuildsWindow : EditorWindow
 
             PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
             PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
+            
+            #if UNITY_2018_3_OR_NEWER
             PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
+            #endif
 
             var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 
