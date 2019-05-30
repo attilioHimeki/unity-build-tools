@@ -6,3 +6,5 @@ Temp
 obj
 Packages
 ProjectSettings
+.DS_Store
+Logs
