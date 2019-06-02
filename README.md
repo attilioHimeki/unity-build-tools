@@ -9,4 +9,4 @@ Usually, for each you'd need to switch platform, change the scripting define sym
 
 Using this tool, all the setup work will be done just once, and the necessary builds will be generated just by pressing a button, with no further input required:
 
-![alt text](https://user-images.githubusercontent.com/4165016/45929898-e9c31d00-bf4f-11e8-8b83-ec4eeafc70bc.png)
+![Editor Window screenshot](https://user-images.githubusercontent.com/4165016/58760653-447b3280-853b-11e9-84df-f1c827af00aa.png)
