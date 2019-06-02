@@ -5,6 +5,7 @@ using UnityEditor;
 [Serializable]
 public class BuildSetupEntry
 {
+	public bool enabled = true;
 	public string buildName = "";
 	public BuildTarget target;
 	public bool debugBuild = false;

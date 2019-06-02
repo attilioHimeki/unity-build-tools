@@ -113,7 +113,10 @@ public class EnhancedBuildsWindow : EditorWindow
                 for(var i = 0; i < list.Count; i++)
                 {
                     var b = list[i];
+                    EditorGUILayout.BeginHorizontal();
+                    b.enabled = EditorGUILayout.Toggle("", b.enabled, GUILayout.MaxWidth(15.0f));
                     b.guiShowOptions = EditorGUILayout.Foldout(b.guiShowOptions, b.buildName, EditorStyles.foldout);
+                    EditorGUILayout.EndHorizontal();
                     if(b.guiShowOptions)
                     {
                         EditorGUI.indentLevel++;
@@ -259,32 +262,39 @@ public class EnhancedBuildsWindow : EditorWindow
         for(var i = 0; i < setupList.Count; i++)
         {
             var setup = setupList[i];
-            var target = setup.target;
-            var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
+            if(setup.enabled)
+            {
+                var target = setup.target;
+                var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
 
-            playerSettingsSnapshot.takeSnapshot(targetGroup);
+                playerSettingsSnapshot.takeSnapshot(targetGroup);
 
-            PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
-            PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
-            
-            #if UNITY_2018_3_OR_NEWER
-            PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
-            #endif
+                PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
+                PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
+                
+                #if UNITY_2018_3_OR_NEWER
+                PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
+                #endif
 
-            var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
+                var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 
-            #if UNITY_2018_1_OR_NEWER
-            BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-            BuildSummary buildSummary = report.summary;
-            UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
-            #else
-            var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
-            var success = string.IsNullOrEmpty(result);
-            UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Success: " + success);
-            #endif
+                #if UNITY_2018_1_OR_NEWER
+                BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+                BuildSummary buildSummary = report.summary;
+                UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
+                #else
+                var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
+                var success = string.IsNullOrEmpty(result);
+                UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Success: " + success);
+                #endif
 
-            // Revert group build player settings after building
-            playerSettingsSnapshot.applySnapshot();
+                // Revert group build player settings after building
+                playerSettingsSnapshot.applySnapshot();
+            }
+            else
+            {
+                UnityEngine.Debug.Log("Skipping Build " + setup.buildName);
+            }
         }
 
     }
