@@ -145,18 +145,20 @@ public class EnhancedBuildsWindow : EditorWindow
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
-            if(buildSetup.isReady())
-            {
-                GUILayout.Space(10);
+            GUILayout.Space(10);
 
+            var isReady = buildSetup.isReady();
+            using (new EditorGUI.DisabledScope(!isReady))
+            {
                 if (GUILayout.Button("Build", GUILayout.ExpandWidth(true))) 
                 {
                     buildGame();
                 }
             }
-            else
+
+            if(!isReady)
             {
-                GUILayout.Label ("Define a Root directory and at least one build entry");
+                GUILayout.Label ("Define a Root directory and at least one active build entry");
             }
         }
         else

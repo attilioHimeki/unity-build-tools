@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using System.Linq;
  
 [Serializable]
 public class BuildSetup : ScriptableObject 
@@ -42,7 +43,7 @@ public class BuildSetup : ScriptableObject
     public bool isReady()
     {
         var hasPath = !string.IsNullOrEmpty(rootDirectory);
-        var hasEntries = entriesList.Count > 0;
+        var hasEntries = entriesList.Any(e => e.enabled);
 
         return hasPath && hasEntries;
     }
