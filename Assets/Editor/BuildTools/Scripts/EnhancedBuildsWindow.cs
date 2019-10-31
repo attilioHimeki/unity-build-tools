@@ -46,7 +46,7 @@ public class EnhancedBuildsWindow : EditorWindow
         }
     }
 
-    void  OnGUI () 
+    void OnGUI () 
     {
         EditorGUIUtility.labelWidth = 0f;
 
@@ -177,6 +177,22 @@ public class EnhancedBuildsWindow : EditorWindow
         b.target = (BuildTarget)EditorGUILayout.EnumPopup ("Target", b.target);
         b.debugBuild = EditorGUILayout.Toggle("Debug Build", b.debugBuild);
         b.scriptingDefineSymbols = EditorGUILayout.TextField("Scripting Define Symbols", b.scriptingDefineSymbols);
+        
+        drawScenesSectionGUI(b);
+        drawAdvancedOptionsSectionGUI(b);
+        drawVRSectionGUI(b);
+
+        if (GUILayout.Button("Remove Entry", GUILayout.ExpandWidth(false))) 
+        {
+            Undo.RecordObject(buildSetup, "Removed Build Setup Entry");
+            buildSetup.deleteBuildSetupEntry(b);
+        }
+        
+        GUILayout.Space(10);
+    }
+
+    private void drawScenesSectionGUI(BuildSetupEntry b)
+    {
         b.useDefaultBuildScenes = EditorGUILayout.Toggle("Use Default Build Scenes", b.useDefaultBuildScenes);
     
         if(!b.useDefaultBuildScenes)
@@ -221,7 +237,10 @@ public class EnhancedBuildsWindow : EditorWindow
                 EditorGUI.indentLevel--;
             }
         }
+    }
 
+    private void drawAdvancedOptionsSectionGUI(BuildSetupEntry b)
+    {
         b.guiShowAdvancedOptions = EditorGUILayout.Foldout(b.guiShowAdvancedOptions, "Advanced Options");
         if(b.guiShowAdvancedOptions)
         {
@@ -242,17 +261,35 @@ public class EnhancedBuildsWindow : EditorWindow
             b.scriptingBackend = (ScriptingImplementation)EditorGUILayout.EnumPopup ("Scripting Backend", b.scriptingBackend);
             EditorGUI.indentLevel--;
         }
-
-        if (GUILayout.Button("Remove Entry", GUILayout.ExpandWidth(false))) 
-        {
-            Undo.RecordObject(buildSetup, "Removed Build Setup Entry");
-            buildSetup.deleteBuildSetupEntry(b);
-        }
-        
-        GUILayout.Space(10);
     }
 
-    private void buildGame ()
+    private void drawVRSectionGUI(BuildSetupEntry b)
+    {
+        b.supportsVR = EditorGUILayout.Toggle("VR Support", b.supportsVR);
+        if(b.supportsVR)
+        {
+            b.guiShowVROptions = EditorGUILayout.Foldout(b.guiShowVROptions, "VR Options");
+            if(b.guiShowVROptions)
+            {
+                EditorGUI.indentLevel++;
+
+                var targetGroup = BuildPipeline.GetBuildTargetGroup(b.target);
+                var vrSdks = PlayerSettings.GetAvailableVirtualRealitySDKs(targetGroup);
+                if(vrSdks.Length > 0)
+                {
+                    b.vrSdkFlags = EditorGUILayout.MaskField("VR SDKs", b.vrSdkFlags, vrSdks);
+                }
+                else
+                {
+                    GUILayout.Label ("No VR SDK available for the current build target.");
+                }
+
+                EditorGUI.indentLevel--;
+            }
+        }
+    }
+
+    private void buildGame()
     {
         var defaultScenes = ScenesUtils.getDefaultScenesAsArray();
 
@@ -277,6 +314,13 @@ public class EnhancedBuildsWindow : EditorWindow
                 #if UNITY_2018_3_OR_NEWER
                 PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
                 #endif
+
+                PlayerSettings.SetVirtualRealitySupported(targetGroup, setup.supportsVR);
+                if(setup.supportsVR)
+                {
+                    var vrSdks = VRUtils.getSelectedVRSdksFromFlags(targetGroup, setup.vrSdkFlags);
+                    PlayerSettings.SetVirtualRealitySDKs(targetGroup, vrSdks);
+                }
 
                 var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 

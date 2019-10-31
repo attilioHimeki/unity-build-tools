@@ -13,6 +13,10 @@ public class BuildSetupEntry
 	public bool useDefaultBuildScenes = true;
 	public List<string> customScenes;
 
+	//VR
+	public bool supportsVR = false;
+	public int vrSdkFlags;
+
 	// Advanced Options
 	#if UNITY_2018_3_OR_NEWER
 	public ManagedStrippingLevel strippingLevel;
@@ -26,5 +30,7 @@ public class BuildSetupEntry
 	[NonSerialized] public bool guiShowOptions = true;
 	[NonSerialized] public bool guiShowCustomScenes = false;
 	[NonSerialized] public bool guiShowAdvancedOptions = false;
+	[NonSerialized] public bool guiShowVROptions = false;
+	
 
 }

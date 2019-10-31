@@ -9,6 +9,8 @@ public class PlayerSettingsSnapshot
     #if UNITY_2018_3_OR_NEWER
     private ManagedStrippingLevel strippingLevel;
     #endif
+    private bool vrSupported;
+    private string[] vrSdks;
 
     public void takeSnapshot(BuildTargetGroup targetGroup)
     {
@@ -20,6 +22,9 @@ public class PlayerSettingsSnapshot
         #if UNITY_2018_3_OR_NEWER
         strippingLevel = PlayerSettings.GetManagedStrippingLevel(targetGroup);
         #endif
+
+        vrSupported = PlayerSettings.GetVirtualRealitySupported(targetGroup);
+        vrSdks = PlayerSettings.GetVirtualRealitySDKs(targetGroup);
     }
 
     public void applySnapshot()
@@ -30,6 +35,9 @@ public class PlayerSettingsSnapshot
         #if UNITY_2018_3_OR_NEWER
         PlayerSettings.SetManagedStrippingLevel(buildTargetGroup, strippingLevel);
         #endif
+
+        PlayerSettings.SetVirtualRealitySupported(buildTargetGroup, vrSupported);
+        PlayerSettings.SetVirtualRealitySDKs(buildTargetGroup, vrSdks);
     }
 
 }
