@@ -1,5 +1,4 @@
 using UnityEditor;
-using System.Collections.Generic;
 
 public static class BuildUtils
 {
@@ -11,7 +10,7 @@ public static class BuildUtils
 
         buildPlayerOptions.target = setupEntry.target;
 
-        if(setupEntry.useDefaultBuildScenes)
+        if (setupEntry.useDefaultBuildScenes)
         {
             buildPlayerOptions.scenes = defaultScenes;
         }
@@ -22,23 +21,23 @@ public static class BuildUtils
 
         buildPlayerOptions.locationPathName = rootDirPath + "/" + setupEntry.buildName;
 
-        if(!string.IsNullOrEmpty(setupEntry.assetBundleManifestPath))
+        if (!string.IsNullOrEmpty(setupEntry.assetBundleManifestPath))
         {
             buildPlayerOptions.assetBundleManifestPath = setupEntry.assetBundleManifestPath;
         }
 
         BuildOptions buildOptions = BuildOptions.None;
-        if(setupEntry.debugBuild)
+        if (setupEntry.debugBuild)
         {
             buildOptions |= BuildOptions.Development;
         }
-        if(setupEntry.strictMode)
+        if (setupEntry.strictMode)
         {
             buildOptions |= BuildOptions.StrictMode;
         }
-        if(setupEntry.target == BuildTarget.iOS)
+        if (setupEntry.target == BuildTarget.iOS)
         {
-            if(setupEntry.iosSymlinkLibraries)
+            if (setupEntry.iosSymlinkLibraries)
             {
                 buildOptions |= BuildOptions.SymlinkLibraries;
             }

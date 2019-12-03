@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Linq;
- 
+
 [Serializable]
-public class BuildSetup : ScriptableObject 
+public class BuildSetup : ScriptableObject
 {
     public string rootDirectory = "";
     public bool abortBatchOnFailure = false;
     public List<BuildSetupEntry> entriesList;
 
-	[MenuItem("Builds/Create/BuildSetup")]
+    [MenuItem("Builds/Create/BuildSetup")]
     public static BuildSetup Create()
     {
         BuildSetup asset = ScriptableObject.CreateInstance<BuildSetup>();
@@ -21,12 +21,12 @@ public class BuildSetup : ScriptableObject
         return asset;
     }
 
-    public void addBuildSetupEntry () 
+    public void addBuildSetupEntry()
     {
         BuildSetupEntry buildEntry = new BuildSetupEntry();
 
         var currentBuildTargetGroup = EditorUserBuildSettings.selectedBuildTargetGroup;
-        
+
         buildEntry.buildName = Application.productName;
         buildEntry.target = EditorUserBuildSettings.activeBuildTarget;
         buildEntry.customScenes = new List<string>();
@@ -35,9 +35,9 @@ public class BuildSetup : ScriptableObject
         entriesList.Add(buildEntry);
     }
 
-    public void deleteBuildSetupEntry(BuildSetupEntry entry) 
+    public void deleteBuildSetupEntry(BuildSetupEntry entry)
     {
-        entriesList.Remove (entry);
+        entriesList.Remove(entry);
     }
 
     public bool isReady()

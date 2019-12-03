@@ -6,9 +6,9 @@ public class PlayerSettingsSnapshot
     private BuildTargetGroup buildTargetGroup;
     private ScriptingImplementation scriptingBackend;
     private string scriptingDefineSymbols;
-    #if UNITY_2018_3_OR_NEWER
+#if UNITY_2018_3_OR_NEWER
     private ManagedStrippingLevel strippingLevel;
-    #endif
+#endif
     private bool vrSupported;
     private string[] vrSdks;
 
@@ -19,9 +19,9 @@ public class PlayerSettingsSnapshot
         scriptingBackend = PlayerSettings.GetScriptingBackend(targetGroup);
         scriptingDefineSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(targetGroup);
 
-        #if UNITY_2018_3_OR_NEWER
+#if UNITY_2018_3_OR_NEWER
         strippingLevel = PlayerSettings.GetManagedStrippingLevel(targetGroup);
-        #endif
+#endif
 
         vrSupported = PlayerSettings.GetVirtualRealitySupported(targetGroup);
         vrSdks = PlayerSettings.GetVirtualRealitySDKs(targetGroup);
@@ -32,9 +32,9 @@ public class PlayerSettingsSnapshot
         PlayerSettings.SetScriptingDefineSymbolsForGroup(buildTargetGroup, scriptingDefineSymbols);
         PlayerSettings.SetScriptingBackend(buildTargetGroup, scriptingBackend);
 
-        #if UNITY_2018_3_OR_NEWER
+#if UNITY_2018_3_OR_NEWER
         PlayerSettings.SetManagedStrippingLevel(buildTargetGroup, strippingLevel);
-        #endif
+#endif
 
         PlayerSettings.SetVirtualRealitySupported(buildTargetGroup, vrSupported);
         PlayerSettings.SetVirtualRealitySDKs(buildTargetGroup, vrSdks);
