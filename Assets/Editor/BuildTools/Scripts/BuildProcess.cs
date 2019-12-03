@@ -70,4 +70,17 @@ public static class BuildProcess
             }
         }
     }
+
+    public static void Build(string buildSetupPath)
+    {
+        var buildSetup = AssetDatabase.LoadAssetAtPath(buildSetupPath, typeof(BuildSetup)) as BuildSetup;
+        if (buildSetup != null)
+        {
+            Build(buildSetup);
+        }
+        else
+        {
+            UnityEngine.Debug.Log("Cannot find build setup in path: " + buildSetupPath);
+        }
+    }
 }
