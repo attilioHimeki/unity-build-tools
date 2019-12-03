@@ -58,7 +58,7 @@ public class EnhancedBuildsWindow : EditorWindow
             EditorGUILayout.LabelField("Current Build File", objectPath);
         }
 
-        GUILayout.BeginHorizontal ();
+        GUILayout.BeginHorizontal();
 
         if(buildSetup != null)
         {
@@ -79,7 +79,7 @@ public class EnhancedBuildsWindow : EditorWindow
             createNewBuildSetup();
         }
 
-        GUILayout.EndHorizontal ();
+        GUILayout.EndHorizontal();
             
         GUILayout.Space(20);
 
@@ -98,6 +98,10 @@ public class EnhancedBuildsWindow : EditorWindow
                 buildSetup.rootDirectory = EditorUtility.SaveFolderPanel("Choose Location", "", "");
             }
             EditorGUILayout.LabelField("Root Directory", buildSetup.rootDirectory);
+
+            GUILayout.Space(20);
+
+            buildSetup.abortBatchOnFailure = EditorGUILayout.Toggle("Abort batch on failure", buildSetup.abortBatchOnFailure);
             
             int buildsAmount = buildSetup.entriesList.Count;
             
@@ -327,6 +331,7 @@ public class EnhancedBuildsWindow : EditorWindow
                 #if UNITY_2018_1_OR_NEWER
                 BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
                 BuildSummary buildSummary = report.summary;
+                var success = (buildSummary.result == BuildResult.Succeeded);
                 UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
                 #else
                 var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
@@ -336,6 +341,12 @@ public class EnhancedBuildsWindow : EditorWindow
 
                 // Revert group build player settings after building
                 playerSettingsSnapshot.applySnapshot();
+
+                if(!success && buildSetup.abortBatchOnFailure)
+                {
+                    UnityEngine.Debug.Log("Aborting remaining Builds from batch");
+                    break;
+                }
             }
             else
             {

@@ -8,7 +8,7 @@ using System.Linq;
 public class BuildSetup : ScriptableObject 
 {
     public string rootDirectory = "";
-
+    public bool abortBatchOnFailure = false;
     public List<BuildSetupEntry> entriesList;
 
 	[MenuItem("Builds/Create/BuildSetup")]
