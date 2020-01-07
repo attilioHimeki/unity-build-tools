@@ -262,6 +262,11 @@ public class EnhancedBuildsWindow : EditorWindow
             {
                 b.iosSymlinkLibraries = EditorGUILayout.Toggle("XCode - Symlink Library", b.iosSymlinkLibraries);
             }
+
+            if (b.target == BuildTarget.Android)
+            {
+                b.androidAppBundle = EditorGUILayout.Toggle("Build Android App Bundle", b.androidAppBundle);
+            }
             b.scriptingBackend = (ScriptingImplementation)EditorGUILayout.EnumPopup("Scripting Backend", b.scriptingBackend);
             EditorGUI.indentLevel--;
         }

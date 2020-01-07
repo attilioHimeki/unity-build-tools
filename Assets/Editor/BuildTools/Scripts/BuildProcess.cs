@@ -5,6 +5,7 @@ using System.Diagnostics;
 #if UNITY_2018_1_OR_NEWER
 using UnityEditor.Build.Reporting;
 #endif
+using System.IO;
 
 public static class BuildProcess
 {
@@ -40,6 +41,11 @@ public static class BuildProcess
                 {
                     var vrSdks = VRUtils.getSelectedVRSdksFromFlags(targetGroup, setup.vrSdkFlags);
                     PlayerSettings.SetVirtualRealitySDKs(targetGroup, vrSdks);
+                }
+
+                if(target == BuildTarget.Android)
+                {
+                    EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
                 }
 
                 var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);

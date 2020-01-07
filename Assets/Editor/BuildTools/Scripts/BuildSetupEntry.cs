@@ -24,6 +24,7 @@ public class BuildSetupEntry
     public string assetBundleManifestPath = "";
     public bool strictMode = false;
     public bool iosSymlinkLibraries = false;
+    public bool androidAppBundle = false;
     public ScriptingImplementation scriptingBackend;
 
     // GUI status

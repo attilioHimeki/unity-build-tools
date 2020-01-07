@@ -9,6 +9,7 @@ public class PlayerSettingsSnapshot
 #if UNITY_2018_3_OR_NEWER
     private ManagedStrippingLevel strippingLevel;
 #endif
+    public bool androidAppBundleEnabled;
     private bool vrSupported;
     private string[] vrSdks;
 
@@ -25,6 +26,8 @@ public class PlayerSettingsSnapshot
 
         vrSupported = PlayerSettings.GetVirtualRealitySupported(targetGroup);
         vrSdks = PlayerSettings.GetVirtualRealitySDKs(targetGroup);
+
+        androidAppBundleEnabled = EditorUserBuildSettings.buildAppBundle;
     }
 
     public void applySnapshot()
@@ -36,8 +39,11 @@ public class PlayerSettingsSnapshot
         PlayerSettings.SetManagedStrippingLevel(buildTargetGroup, strippingLevel);
 #endif
 
+        EditorUserBuildSettings.buildAppBundle = androidAppBundleEnabled;
+
         PlayerSettings.SetVirtualRealitySupported(buildTargetGroup, vrSupported);
         PlayerSettings.SetVirtualRealitySDKs(buildTargetGroup, vrSdks);
+
     }
 
 }
