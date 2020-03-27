@@ -9,6 +9,8 @@ using UnityEditor.Build.Reporting;
 public static class BuildProcess
 {
 
+    private const string BUILD_FILE_RELATIVE_PATH_ARG = "-buildSetupRelPath";
+
     public static void Build(BuildSetup buildSetup)
     {
         var defaultScenes = ScenesUtils.getDefaultScenesAsArray();
@@ -65,7 +67,7 @@ public static class BuildProcess
 
                 if (!success && buildSetup.abortBatchOnFailure)
                 {
-                    UnityEngine.Debug.Log("Aborting remaining Builds from batch");
+                    UnityEngine.Debug.LogError("Failure - Aborting remaining builds from batch");
                     break;
                 }
             }
@@ -76,16 +78,40 @@ public static class BuildProcess
         }
     }
 
-    public static void Build(string buildSetupPath)
+    public static void Build(string buildSetupRelativePath)
     {
-        var buildSetup = AssetDatabase.LoadAssetAtPath(buildSetupPath, typeof(BuildSetup)) as BuildSetup;
+        var buildSetup = AssetDatabase.LoadAssetAtPath(buildSetupRelativePath, typeof(BuildSetup)) as BuildSetup;
         if (buildSetup != null)
         {
             Build(buildSetup);
         }
         else
         {
-            UnityEngine.Debug.Log("Cannot find build setup in path: " + buildSetupPath);
+            UnityEngine.Debug.LogError("Cannot find build setup in path: " + buildSetupRelativePath);
+        }
+    }
+
+    public static void BuildWithArgs()
+    {
+        var args = System.Environment.GetCommandLineArgs ();
+
+        string buildFilePath = string.Empty;
+        for (int i = 0; i < args.Length; i++) 
+        {
+            if (args [i] == BUILD_FILE_RELATIVE_PATH_ARG) 
+            {
+                buildFilePath = args[i + 1];
+                break;
+            }
+        }
+
+        if(!string.IsNullOrEmpty(buildFilePath))
+        {
+            Build(buildFilePath);
+        }
+        else
+        {
+            UnityEngine.Debug.LogError("Cannot find build setup path, make sure to specify using " + BUILD_FILE_RELATIVE_PATH_ARG);
         }
     }
 }
