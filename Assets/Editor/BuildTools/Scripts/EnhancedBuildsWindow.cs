@@ -121,8 +121,11 @@ namespace Himeki.Build
                         var b = list[i];
                         EditorGUILayout.BeginHorizontal();
 
+                        b.enabled = EditorGUILayout.Toggle("", b.enabled, GUILayout.MaxWidth(15.0f));
+                        b.guiShowOptions = EditorGUILayout.Foldout(b.guiShowOptions, b.buildName, EditorStyles.foldout);
+
                         GUI.backgroundColor = Color.red;
-                        if (GUILayout.Button("x", GUILayout.ExpandWidth(false)))
+                        if (GUILayout.Button(new GUIContent("x", "Deletes Build Entry"), GUILayout.ExpandWidth(false)))
                         {
                             if(EditorUtility.DisplayDialog("Delete Build Entry?",
                                 "Are you sure you want to delete build entry " + b.buildName
@@ -132,10 +135,15 @@ namespace Himeki.Build
                                 buildSetup.deleteBuildSetupEntry(b);
                             }
                         }
+
+                        GUI.backgroundColor = Color.green;
+                        if (GUILayout.Button(new GUIContent("c", "Duplicates Build Entry"), GUILayout.ExpandWidth(false)))
+                        {
+                            Undo.RecordObject(buildSetup, "Duplicate Build Setup Entry");
+                            buildSetup.duplicateBuildSetupEntry(b);
+                        }
                         GUI.backgroundColor = Color.white;
 
-                        b.enabled = EditorGUILayout.Toggle("", b.enabled, GUILayout.MaxWidth(15.0f));
-                        b.guiShowOptions = EditorGUILayout.Foldout(b.guiShowOptions, b.buildName, EditorStyles.foldout);
                         EditorGUILayout.EndHorizontal();
                         if (b.guiShowOptions)
                         {
@@ -143,6 +151,8 @@ namespace Himeki.Build
                             drawBuildEntryGUI(b);
                             EditorGUI.indentLevel--;
                         }
+
+                        GUILayout.Space(5);
                     }
 
                     EditorGUILayout.EndScrollView();
@@ -155,7 +165,7 @@ namespace Himeki.Build
 
                 GUILayout.Space(10);
 
-                if (GUILayout.Button("Add Entry", GUILayout.ExpandWidth(true)))
+                if (GUILayout.Button(new GUIContent("Add Entry", "Adds a new build entry to the list"), GUILayout.ExpandWidth(true)))
                 {
                     Undo.RecordObject(buildSetup, "Add Build Setup Entry");
                     buildSetup.addBuildSetupEntry();
@@ -204,8 +214,6 @@ namespace Himeki.Build
                 drawAdvancedOptionsSectionGUI(b);
                 drawVRSectionGUI(b);
             }
-
-            GUILayout.Space(15);
         }
 
         private void drawScenesSectionGUI(BuildSetupEntry b)

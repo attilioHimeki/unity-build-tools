@@ -43,6 +43,14 @@ namespace Himeki.Build
             entriesList.Remove(entry);
         }
 
+        public void duplicateBuildSetupEntry(BuildSetupEntry entry)
+        {
+            var index = entriesList.IndexOf(entry);
+            BuildSetupEntry buildEntry = BuildSetupEntry.Clone(entry);
+            buildEntry.buildName = buildEntry.buildName + "_clone";
+            entriesList.Insert(index + 1, buildEntry);
+        }
+
         public bool isReady()
         {
             var hasPath = !string.IsNullOrEmpty(rootDirectory);

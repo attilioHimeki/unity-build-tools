@@ -43,6 +43,11 @@ namespace Himeki.Build
         [NonSerialized] public bool guiShowAdvancedOptions = false;
         [NonSerialized] public bool guiShowVROptions = false;
 
+        public static BuildSetupEntry Clone(BuildSetupEntry source)
+        {
+            return source.MemberwiseClone() as BuildSetupEntry;
+        }
+
     }
 
 }
