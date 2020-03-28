@@ -1,19 +1,22 @@
 using UnityEditor;
 
-public static class ScenesUtils
+namespace Himeki.Build
 {
-    public static string[] getDefaultScenesAsArray()
+    public static class ScenesUtils
     {
-        var scenes = EditorBuildSettings.scenes;
-
-        var result = new string[scenes.Length];
-
-        for (int i = 0; i < scenes.Length; i++)
+        public static string[] getDefaultScenesAsArray()
         {
-            result[i] = scenes[i].path;
+            var scenes = EditorBuildSettings.scenes;
+
+            var result = new string[scenes.Length];
+
+            for (int i = 0; i < scenes.Length; i++)
+            {
+                result[i] = scenes[i].path;
+            }
+
+            return result;
         }
 
-        return result;
     }
-
 }

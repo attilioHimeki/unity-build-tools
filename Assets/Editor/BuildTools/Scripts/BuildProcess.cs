@@ -6,112 +6,115 @@ using System.Diagnostics;
 using UnityEditor.Build.Reporting;
 #endif
 
-public static class BuildProcess
+namespace Himeki.Build
 {
-
-    private const string BUILD_FILE_RELATIVE_PATH_ARG = "-buildSetupRelPath";
-
-    public static void Build(BuildSetup buildSetup)
+    public static class BuildProcess
     {
-        var defaultScenes = ScenesUtils.getDefaultScenesAsArray();
 
-        string path = buildSetup.rootDirectory;
+        private const string BUILD_FILE_RELATIVE_PATH_ARG = "-buildSetupRelPath";
 
-        var playerSettingsSnapshot = new PlayerSettingsSnapshot();
-
-        var setupList = buildSetup.entriesList;
-        for (var i = 0; i < setupList.Count; i++)
+        public static void Build(BuildSetup buildSetup)
         {
-            var setup = setupList[i];
-            if (setup.enabled)
+            var defaultScenes = ScenesUtils.getDefaultScenesAsArray();
+
+            string path = buildSetup.rootDirectory;
+
+            var playerSettingsSnapshot = new PlayerSettingsSnapshot();
+
+            var setupList = buildSetup.entriesList;
+            for (var i = 0; i < setupList.Count; i++)
             {
-                var target = setup.target;
-                var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
+                var setup = setupList[i];
+                if (setup.enabled)
+                {
+                    var target = setup.target;
+                    var targetGroup = BuildPipeline.GetBuildTargetGroup(target);
 
-                playerSettingsSnapshot.takeSnapshot(targetGroup);
+                    playerSettingsSnapshot.takeSnapshot(targetGroup);
 
-                PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
-                PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
+                    PlayerSettings.SetScriptingBackend(targetGroup, setup.scriptingBackend);
+                    PlayerSettings.SetScriptingDefineSymbolsForGroup(targetGroup, setup.scriptingDefineSymbols);
 
 #if UNITY_2018_3_OR_NEWER
-                PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
+                    PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
 #endif
 
-                PlayerSettings.SetVirtualRealitySupported(targetGroup, setup.supportsVR);
-                if (setup.supportsVR)
-                {
-                    var vrSdks = VRUtils.getSelectedVRSdksFromFlags(targetGroup, setup.vrSdkFlags);
-                    PlayerSettings.SetVirtualRealitySDKs(targetGroup, vrSdks);
-                }
+                    PlayerSettings.SetVirtualRealitySupported(targetGroup, setup.supportsVR);
+                    if (setup.supportsVR)
+                    {
+                        var vrSdks = VRUtils.getSelectedVRSdksFromFlags(targetGroup, setup.vrSdkFlags);
+                        PlayerSettings.SetVirtualRealitySDKs(targetGroup, vrSdks);
+                    }
 
-                if (target == BuildTarget.Android)
-                {
-                    EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
-                }
+                    if (target == BuildTarget.Android)
+                    {
+                        EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
+                    }
 
-                var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
+                    var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 
 #if UNITY_2018_1_OR_NEWER
-                BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
-                BuildSummary buildSummary = report.summary;
-                var success = (buildSummary.result == BuildResult.Succeeded);
-                UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
+                    BuildReport report = BuildPipeline.BuildPlayer(buildPlayerOptions);
+                    BuildSummary buildSummary = report.summary;
+                    var success = (buildSummary.result == BuildResult.Succeeded);
+                    UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
 #else
                 var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
                 var success = string.IsNullOrEmpty(result);
                 UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Success: " + success);
 #endif
 
-                // Revert group build player settings after building
-                playerSettingsSnapshot.applySnapshot();
+                    // Revert group build player settings after building
+                    playerSettingsSnapshot.applySnapshot();
 
-                if (!success && buildSetup.abortBatchOnFailure)
-                {
-                    UnityEngine.Debug.LogError("Failure - Aborting remaining builds from batch");
-                    break;
+                    if (!success && buildSetup.abortBatchOnFailure)
+                    {
+                        UnityEngine.Debug.LogError("Failure - Aborting remaining builds from batch");
+                        break;
+                    }
                 }
+                else
+                {
+                    UnityEngine.Debug.Log("Skipping Build " + setup.buildName);
+                }
+            }
+        }
+
+        public static void Build(string buildSetupRelativePath)
+        {
+            var buildSetup = AssetDatabase.LoadAssetAtPath(buildSetupRelativePath, typeof(BuildSetup)) as BuildSetup;
+            if (buildSetup != null)
+            {
+                Build(buildSetup);
             }
             else
             {
-                UnityEngine.Debug.Log("Skipping Build " + setup.buildName);
+                UnityEngine.Debug.LogError("Cannot find build setup in path: " + buildSetupRelativePath);
             }
         }
-    }
 
-    public static void Build(string buildSetupRelativePath)
-    {
-        var buildSetup = AssetDatabase.LoadAssetAtPath(buildSetupRelativePath, typeof(BuildSetup)) as BuildSetup;
-        if (buildSetup != null)
+        public static void BuildWithArgs()
         {
-            Build(buildSetup);
-        }
-        else
-        {
-            UnityEngine.Debug.LogError("Cannot find build setup in path: " + buildSetupRelativePath);
-        }
-    }
+            var args = System.Environment.GetCommandLineArgs();
 
-    public static void BuildWithArgs()
-    {
-        var args = System.Environment.GetCommandLineArgs ();
-
-        string buildFilePath = string.Empty;
-        for (int i = 0; i < args.Length; i++) 
-        {
-            if (args [i] == BUILD_FILE_RELATIVE_PATH_ARG) 
+            string buildFilePath = string.Empty;
+            for (int i = 0; i < args.Length; i++)
             {
-                buildFilePath = args[i + 1];
-                break;
+                if (args[i] == BUILD_FILE_RELATIVE_PATH_ARG)
+                {
+                    buildFilePath = args[i + 1];
+                    break;
+                }
             }
-        }
 
-        if(!string.IsNullOrEmpty(buildFilePath))
-        {
-            Build(buildFilePath);
-        }
-        else
-        {
-            UnityEngine.Debug.LogError("Cannot find build setup path, make sure to specify using " + BUILD_FILE_RELATIVE_PATH_ARG);
+            if (!string.IsNullOrEmpty(buildFilePath))
+            {
+                Build(buildFilePath);
+            }
+            else
+            {
+                UnityEngine.Debug.LogError("Cannot find build setup path, make sure to specify using " + BUILD_FILE_RELATIVE_PATH_ARG);
+            }
         }
     }
 }

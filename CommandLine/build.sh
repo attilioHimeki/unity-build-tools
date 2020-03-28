@@ -15,12 +15,12 @@ function set_build_setup_path()
 }
 
 set_build_setup_path $3
-$UNITYPATH -quit -batchmode -nographics -projectPath $PROJECTPATH -executeMethod BuildProcess.BuildWithArgs -buildSetupRelPath $BUILDSETUPPATH -logFile 
+$UNITYPATH -quit -batchmode -nographics -projectPath $PROJECTPATH -executeMethod Himeki.Build.BuildProcess.BuildWithArgs -buildSetupRelPath $BUILDSETUPPATH -logFile 
 
 #EXAMPLE
 # /Applications/Unity/Hub/Editor/2018.4.6f1/Unity.app/Contents/MacOS/Unity 
 # -quit -batchmode -nographics 
 # -projectPath /Users/attiliocarotenuto/Documents/GitHub/unity-build-tools 
-# -executeMethod BuildProcess.BuildWithArgs 
+# -executeMethod Himeki.Build.BuildProcess.BuildWithArgs
 # -buildSetupRelPath Assets/Editor/BuildTools/Setup/BuildSetup.asset 
 # -logFile

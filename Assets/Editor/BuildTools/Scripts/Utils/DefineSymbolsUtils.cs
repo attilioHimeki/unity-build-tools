@@ -1,23 +1,25 @@
 using System;
 
-public static class DefineSymbolsUtils
+namespace Himeki.Build
 {
-    private static readonly char[] SPLIT_DIVIDER = new char[] { ';' };
-    private const string JOIN_SEPARATOR = ";";
-
-    public static string[] splitDefineSymbolString(string defineSymbols)
+    public static class DefineSymbolsUtils
     {
-        string[] split = defineSymbols.Split(SPLIT_DIVIDER, StringSplitOptions.RemoveEmptyEntries);
+        private static readonly char[] SPLIT_DIVIDER = new char[] { ';' };
+        private const string JOIN_SEPARATOR = ";";
 
-        return split;
+        public static string[] splitDefineSymbolString(string defineSymbols)
+        {
+            string[] split = defineSymbols.Split(SPLIT_DIVIDER, StringSplitOptions.RemoveEmptyEntries);
+
+            return split;
+        }
+
+        public static string mergeDefineSymbols(string[] defineSymbols)
+        {
+            string merge = string.Join(JOIN_SEPARATOR, defineSymbols);
+
+            return merge;
+        }
+
     }
-
-    public static string mergeDefineSymbols(string[] defineSymbols)
-    {
-        string merge = string.Join(JOIN_SEPARATOR, defineSymbols);
-
-        return merge;
-    }
-
-
 }

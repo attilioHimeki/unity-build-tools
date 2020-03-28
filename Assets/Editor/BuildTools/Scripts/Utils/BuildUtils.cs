@@ -1,50 +1,53 @@
 using UnityEditor;
 
-public static class BuildUtils
+namespace Himeki.Build
 {
-
-    public const string SETUPS_REL_DIRECTORY = "Assets/Editor/BuildTools/";
-    public static BuildPlayerOptions getBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
+    public static class BuildUtils
     {
-        var buildPlayerOptions = new BuildPlayerOptions();
 
-        buildPlayerOptions.target = setupEntry.target;
+        public const string SETUPS_REL_DIRECTORY = "Assets/Editor/BuildTools/";
+        public static BuildPlayerOptions getBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
+        {
+            var buildPlayerOptions = new BuildPlayerOptions();
 
-        if (setupEntry.useDefaultBuildScenes)
-        {
-            buildPlayerOptions.scenes = defaultScenes;
-        }
-        else
-        {
-            buildPlayerOptions.scenes = setupEntry.customScenes.ToArray();
-        }
+            buildPlayerOptions.target = setupEntry.target;
 
-        buildPlayerOptions.locationPathName = rootDirPath + "/" + setupEntry.buildName;
-
-        if (!string.IsNullOrEmpty(setupEntry.assetBundleManifestPath))
-        {
-            buildPlayerOptions.assetBundleManifestPath = setupEntry.assetBundleManifestPath;
-        }
-
-        BuildOptions buildOptions = BuildOptions.None;
-        if (setupEntry.debugBuild)
-        {
-            buildOptions |= BuildOptions.Development;
-        }
-        if (setupEntry.strictMode)
-        {
-            buildOptions |= BuildOptions.StrictMode;
-        }
-        if (setupEntry.target == BuildTarget.iOS)
-        {
-            if (setupEntry.iosSymlinkLibraries)
+            if (setupEntry.useDefaultBuildScenes)
             {
-                buildOptions |= BuildOptions.SymlinkLibraries;
+                buildPlayerOptions.scenes = defaultScenes;
             }
+            else
+            {
+                buildPlayerOptions.scenes = setupEntry.customScenes.ToArray();
+            }
+
+            buildPlayerOptions.locationPathName = rootDirPath + "/" + setupEntry.buildName;
+
+            if (!string.IsNullOrEmpty(setupEntry.assetBundleManifestPath))
+            {
+                buildPlayerOptions.assetBundleManifestPath = setupEntry.assetBundleManifestPath;
+            }
+
+            BuildOptions buildOptions = BuildOptions.None;
+            if (setupEntry.debugBuild)
+            {
+                buildOptions |= BuildOptions.Development;
+            }
+            if (setupEntry.strictMode)
+            {
+                buildOptions |= BuildOptions.StrictMode;
+            }
+            if (setupEntry.target == BuildTarget.iOS)
+            {
+                if (setupEntry.iosSymlinkLibraries)
+                {
+                    buildOptions |= BuildOptions.SymlinkLibraries;
+                }
+            }
+
+            buildPlayerOptions.options = buildOptions;
+
+            return buildPlayerOptions;
         }
-
-        buildPlayerOptions.options = buildOptions;
-
-        return buildPlayerOptions;
     }
 }

@@ -1,23 +1,26 @@
 using System.Collections.Generic;
 using UnityEditor;
 
-public static class VRUtils
+namespace Himeki.Build
 {
-
-    public static string[] getSelectedVRSdksFromFlags(BuildTargetGroup targetGroup, int flags)
+    public static class VRUtils
     {
-        var result = new List<string>();
-        var vrSdks = PlayerSettings.GetAvailableVirtualRealitySDKs(targetGroup);
-        for (int i = 0; i < vrSdks.Length; i++)
+
+        public static string[] getSelectedVRSdksFromFlags(BuildTargetGroup targetGroup, int flags)
         {
-            int layer = 1 << i;
-            if ((flags & layer) != 0)
+            var result = new List<string>();
+            var vrSdks = PlayerSettings.GetAvailableVirtualRealitySDKs(targetGroup);
+            for (int i = 0; i < vrSdks.Length; i++)
             {
-                result.Add(vrSdks[i]);
+                int layer = 1 << i;
+                if ((flags & layer) != 0)
+                {
+                    result.Add(vrSdks[i]);
+                }
             }
+
+            return result.ToArray();
         }
 
-        return result.ToArray();
     }
-
 }
