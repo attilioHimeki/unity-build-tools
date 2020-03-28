@@ -29,6 +29,9 @@ namespace Himeki.Build
         public bool iosSymlinkLibraries = false;
         public bool androidAppBundle = false;
         public ScriptingImplementation scriptingBackend;
+        //PS4
+        public PS4BuildSubtarget ps4BuildSubtarget;
+        public PS4HardwareTarget ps4HardwareTarget;
 
         // GUI status
         [NonSerialized] public bool guiShowOptions = true;

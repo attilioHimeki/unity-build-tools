@@ -181,17 +181,20 @@ namespace Himeki.Build
         {
             b.buildName = EditorGUILayout.TextField("Build Name", b.buildName);
             b.target = (BuildTarget)EditorGUILayout.EnumPopup("Target", b.target);
-            b.debugBuild = EditorGUILayout.Toggle("Debug Build", b.debugBuild);
-            b.scriptingDefineSymbols = EditorGUILayout.TextField("Scripting Define Symbols", b.scriptingDefineSymbols);
-
-            drawScenesSectionGUI(b);
-            drawAdvancedOptionsSectionGUI(b);
-            drawVRSectionGUI(b);
-
-            if (GUILayout.Button("Remove Entry", GUILayout.ExpandWidth(false)))
+            if(b.target > 0)
             {
-                Undo.RecordObject(buildSetup, "Removed Build Setup Entry");
-                buildSetup.deleteBuildSetupEntry(b);
+                b.debugBuild = EditorGUILayout.Toggle("Debug Build", b.debugBuild);
+                b.scriptingDefineSymbols = EditorGUILayout.TextField("Scripting Define Symbols", b.scriptingDefineSymbols);
+
+                drawScenesSectionGUI(b);
+                drawAdvancedOptionsSectionGUI(b);
+                drawVRSectionGUI(b);
+
+                if (GUILayout.Button("Remove Entry", GUILayout.ExpandWidth(false)))
+                {
+                    Undo.RecordObject(buildSetup, "Removed Build Setup Entry");
+                    buildSetup.deleteBuildSetupEntry(b);
+                }
             }
 
             GUILayout.Space(10);
@@ -260,6 +263,7 @@ namespace Himeki.Build
                                                     "Do not allow the build to succeed if any errors are reported."),
                                                     b.strictMode);
                 b.assetBundleManifestPath = EditorGUILayout.TextField("AssetBundle Manifest Path", b.assetBundleManifestPath);
+
                 if (b.target == BuildTarget.iOS)
                 {
                     b.iosSymlinkLibraries = EditorGUILayout.Toggle("XCode - Symlink Library", b.iosSymlinkLibraries);
@@ -269,6 +273,13 @@ namespace Himeki.Build
                 {
                     b.androidAppBundle = EditorGUILayout.Toggle("Build Android App Bundle", b.androidAppBundle);
                 }
+
+                if(b.target == BuildTarget.PS4)
+                {
+                    b.ps4BuildSubtarget = (PS4BuildSubtarget)EditorGUILayout.EnumPopup("PS4 Build Subtarget", b.ps4BuildSubtarget);
+                    b.ps4HardwareTarget = (PS4HardwareTarget)EditorGUILayout.EnumPopup("PS4 Hardware Target", b.ps4HardwareTarget);
+                }
+
                 b.scriptingBackend = (ScriptingImplementation)EditorGUILayout.EnumPopup("Scripting Backend", b.scriptingBackend);
                 EditorGUI.indentLevel--;
             }
@@ -276,26 +287,29 @@ namespace Himeki.Build
 
         private void drawVRSectionGUI(BuildSetupEntry b)
         {
-            b.supportsVR = EditorGUILayout.Toggle("VR Support", b.supportsVR);
-            if (b.supportsVR)
+            var targetGroup = BuildPipeline.GetBuildTargetGroup(b.target);
+            if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
             {
-                b.guiShowVROptions = EditorGUILayout.Foldout(b.guiShowVROptions, "VR Options");
-                if (b.guiShowVROptions)
+                b.supportsVR = EditorGUILayout.Toggle("VR Support", b.supportsVR);
+                if (b.supportsVR)
                 {
-                    EditorGUI.indentLevel++;
-
-                    var targetGroup = BuildPipeline.GetBuildTargetGroup(b.target);
-                    var vrSdks = PlayerSettings.GetAvailableVirtualRealitySDKs(targetGroup);
-                    if (vrSdks.Length > 0)
+                    b.guiShowVROptions = EditorGUILayout.Foldout(b.guiShowVROptions, "VR Options");
+                    if (b.guiShowVROptions)
                     {
-                        b.vrSdkFlags = EditorGUILayout.MaskField("VR SDKs", b.vrSdkFlags, vrSdks);
-                    }
-                    else
-                    {
-                        GUILayout.Label("No VR SDK available for the current build target.");
-                    }
+                        EditorGUI.indentLevel++;
 
-                    EditorGUI.indentLevel--;
+                        var vrSdks = PlayerSettings.GetAvailableVirtualRealitySDKs(targetGroup);
+                        if (vrSdks.Length > 0)
+                        {
+                            b.vrSdkFlags = EditorGUILayout.MaskField("VR SDKs", b.vrSdkFlags, vrSdks);
+                        }
+                        else
+                        {
+                            GUILayout.Label("No VR SDK available for the current build target.");
+                        }
+
+                        EditorGUI.indentLevel--;
+                    }
                 }
             }
         }

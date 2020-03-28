@@ -33,10 +33,12 @@ namespace Himeki.Build
             {
                 buildOptions |= BuildOptions.Development;
             }
+            
             if (setupEntry.strictMode)
             {
                 buildOptions |= BuildOptions.StrictMode;
             }
+
             if (setupEntry.target == BuildTarget.iOS)
             {
                 if (setupEntry.iosSymlinkLibraries)

@@ -39,16 +39,29 @@ namespace Himeki.Build
                     PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
 #endif
 
-                    PlayerSettings.SetVirtualRealitySupported(targetGroup, setup.supportsVR);
-                    if (setup.supportsVR)
+                    if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
                     {
-                        var vrSdks = VRUtils.getSelectedVRSdksFromFlags(targetGroup, setup.vrSdkFlags);
-                        PlayerSettings.SetVirtualRealitySDKs(targetGroup, vrSdks);
+                        PlayerSettings.SetVirtualRealitySupported(targetGroup, setup.supportsVR);
+                        if (setup.supportsVR)
+                        {
+                            var vrSdks = VRUtils.getSelectedVRSdksFromFlags(targetGroup, setup.vrSdkFlags);
+                            PlayerSettings.SetVirtualRealitySDKs(targetGroup, vrSdks);
+                        }
+                    }
+                    else
+                    {
+                        PlayerSettings.SetVirtualRealitySupported(targetGroup, false);
                     }
 
                     if (target == BuildTarget.Android)
                     {
                         EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
+                    }
+
+                    if(target == BuildTarget.PS4)
+                    {
+                        EditorUserBuildSettings.ps4HardwareTarget = setup.ps4HardwareTarget;
+                        EditorUserBuildSettings.ps4BuildSubtarget = setup.ps4BuildSubtarget;
                     }
 
                     var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);

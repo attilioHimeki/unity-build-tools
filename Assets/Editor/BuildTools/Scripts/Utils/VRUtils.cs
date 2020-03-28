@@ -5,7 +5,6 @@ namespace Himeki.Build
 {
     public static class VRUtils
     {
-
         public static string[] getSelectedVRSdksFromFlags(BuildTargetGroup targetGroup, int flags)
         {
             var result = new List<string>();
@@ -20,6 +19,12 @@ namespace Himeki.Build
             }
 
             return result.ToArray();
+        }
+
+        public static bool targetGroupSupportsVirtualReality(BuildTargetGroup targetGroup)
+        {
+            var vrSdks = PlayerSettings.GetAvailableVirtualRealitySDKs(targetGroup);
+            return vrSdks.Length > 0;
         }
 
     }
