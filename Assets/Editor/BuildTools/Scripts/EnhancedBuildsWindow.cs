@@ -57,7 +57,7 @@ namespace Himeki.Build
             if (buildSetup != null)
             {
                 string objectPath = EditorPrefs.GetString(EDITOR_PREFS_KEY);
-                EditorGUILayout.LabelField("Current Build File", objectPath);
+                EditorGUILayout.LabelField("Current Build Setup File", objectPath);
             }
 
             GUILayout.BeginHorizontal();
@@ -83,7 +83,7 @@ namespace Himeki.Build
 
             GUILayout.EndHorizontal();
 
-            GUILayout.Space(20);
+            GUILayout.Space(5);
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
 
@@ -91,7 +91,7 @@ namespace Himeki.Build
             {
                 GUILayout.Label("Loaded Build Setup", EditorStyles.boldLabel);
 
-                GUILayout.Space(20);
+                GUILayout.Space(10);
 
                 EditorGUIUtility.labelWidth = 200f;
                 if (GUILayout.Button("Choose Root Directory", GUILayout.ExpandWidth(false)))
@@ -101,15 +101,15 @@ namespace Himeki.Build
                 }
                 EditorGUILayout.LabelField("Root Directory", buildSetup.rootDirectory);
 
-                GUILayout.Space(20);
+                GUILayout.Space(10); 
 
                 buildSetup.abortBatchOnFailure = EditorGUILayout.Toggle("Abort batch on failure", buildSetup.abortBatchOnFailure);
 
                 int buildsAmount = buildSetup.entriesList.Count;
 
-                GUILayout.Space(20);
-                GUILayout.Label("Builds (" + buildsAmount + ")", EditorStyles.label);
                 GUILayout.Space(10);
+                GUILayout.Label("Builds (" + buildsAmount + ")", EditorStyles.label);
+                GUILayout.Space(5);
 
                 if (buildsAmount > 0)
                 {
@@ -120,6 +120,20 @@ namespace Himeki.Build
                     {
                         var b = list[i];
                         EditorGUILayout.BeginHorizontal();
+
+                        GUI.backgroundColor = Color.red;
+                        if (GUILayout.Button("x", GUILayout.ExpandWidth(false)))
+                        {
+                            if(EditorUtility.DisplayDialog("Delete Build Entry?",
+                                "Are you sure you want to delete build entry " + b.buildName
+                                , "Yes", "No"))
+                            {
+                                Undo.RecordObject(buildSetup, "Removed Build Setup Entry");
+                                buildSetup.deleteBuildSetupEntry(b);
+                            }
+                        }
+                        GUI.backgroundColor = Color.white;
+
                         b.enabled = EditorGUILayout.Toggle("", b.enabled, GUILayout.MaxWidth(15.0f));
                         b.guiShowOptions = EditorGUILayout.Foldout(b.guiShowOptions, b.buildName, EditorStyles.foldout);
                         EditorGUILayout.EndHorizontal();
@@ -189,15 +203,9 @@ namespace Himeki.Build
                 drawScenesSectionGUI(b);
                 drawAdvancedOptionsSectionGUI(b);
                 drawVRSectionGUI(b);
-
-                if (GUILayout.Button("Remove Entry", GUILayout.ExpandWidth(false)))
-                {
-                    Undo.RecordObject(buildSetup, "Removed Build Setup Entry");
-                    buildSetup.deleteBuildSetupEntry(b);
-                }
             }
 
-            GUILayout.Space(10);
+            GUILayout.Space(15);
         }
 
         private void drawScenesSectionGUI(BuildSetupEntry b)
@@ -237,11 +245,18 @@ namespace Himeki.Build
                         }
 
                     }
-                    if (GUILayout.Button("Add Scene", GUILayout.ExpandWidth(false)))
+
+                    using(var horizontalScope = new GUILayout.HorizontalScope())
                     {
-                        Undo.RecordObject(buildSetup, "Add Build Setup Entry Custom scene");
-                        b.customScenes.Add(string.Empty);
+                        GUILayout.Space(20f);
+                    
+                        if (GUILayout.Button("Add Scene", GUILayout.ExpandWidth(false)))
+                        {
+                            Undo.RecordObject(buildSetup, "Add Build Setup Entry Custom scene");
+                            b.customScenes.Add(string.Empty);
+                        }
                     }
+                    
 
                     EditorGUI.indentLevel--;
                 }
