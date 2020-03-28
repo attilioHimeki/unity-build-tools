@@ -56,6 +56,7 @@ namespace Himeki.Build
                     if (target == BuildTarget.Android)
                     {
                         EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
+                        PlayerSettings.Android.targetArchitectures = setup.androidArchitecture;
                     }
 
                     if(target == BuildTarget.PS4)

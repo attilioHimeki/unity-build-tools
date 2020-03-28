@@ -263,6 +263,7 @@ namespace Himeki.Build
                                                     "Do not allow the build to succeed if any errors are reported."),
                                                     b.strictMode);
                 b.assetBundleManifestPath = EditorGUILayout.TextField("AssetBundle Manifest Path", b.assetBundleManifestPath);
+                b.scriptingBackend = (ScriptingImplementation)EditorGUILayout.EnumPopup("Scripting Backend", b.scriptingBackend);
 
                 if (b.target == BuildTarget.iOS)
                 {
@@ -272,6 +273,7 @@ namespace Himeki.Build
                 if (b.target == BuildTarget.Android)
                 {
                     b.androidAppBundle = EditorGUILayout.Toggle("Build Android App Bundle", b.androidAppBundle);
+                    b.androidArchitecture = (AndroidArchitecture)EditorGUILayout.EnumPopup("Android Architecture", b.androidArchitecture);
                 }
 
                 if(b.target == BuildTarget.PS4)
@@ -280,7 +282,6 @@ namespace Himeki.Build
                     b.ps4HardwareTarget = (PS4HardwareTarget)EditorGUILayout.EnumPopup("PS4 Hardware Target", b.ps4HardwareTarget);
                 }
 
-                b.scriptingBackend = (ScriptingImplementation)EditorGUILayout.EnumPopup("Scripting Backend", b.scriptingBackend);
                 EditorGUI.indentLevel--;
             }
         }
