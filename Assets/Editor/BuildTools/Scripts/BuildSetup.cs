@@ -51,6 +51,19 @@ namespace Himeki.Build
             entriesList.Insert(index + 1, buildEntry);
         }
 
+        public void rearrangeBuildSetupEntry(BuildSetupEntry entry, bool up)
+        {
+            var oldIndex = entriesList.IndexOf(entry);
+            var newIndex = up ? oldIndex - 1 : oldIndex + 1;
+            
+            if(newIndex >= 0 && newIndex < entriesList.Count)
+            {
+                var otherEntry = entriesList[newIndex];
+                entriesList[newIndex] = entry;
+                entriesList[oldIndex] = otherEntry;
+            }
+        }
+
         public bool isReady()
         {
             var hasPath = !string.IsNullOrEmpty(rootDirectory);

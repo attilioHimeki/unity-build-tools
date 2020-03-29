@@ -124,6 +124,24 @@ namespace Himeki.Build
                         b.enabled = EditorGUILayout.Toggle("", b.enabled, GUILayout.MaxWidth(15.0f));
                         b.guiShowOptions = EditorGUILayout.Foldout(b.guiShowOptions, b.buildName, EditorStyles.foldout);
 
+                        using (new EditorGUI.DisabledScope(i == 0))
+                        {
+                            if (GUILayout.Button(new GUIContent("↑", "Rearranges Build Entry up"), GUILayout.ExpandWidth(false)))
+                            {
+                                Undo.RecordObject(buildSetup, "Rearranged Build Entry up");
+                                buildSetup.rearrangeBuildSetupEntry(b, true);
+                            }
+                        }
+
+                        using (new EditorGUI.DisabledScope(i == list.Count - 1))
+                        {
+                            if (GUILayout.Button(new GUIContent("↓", "Rearranges Build Entry down"), GUILayout.ExpandWidth(false)))
+                            {
+                                Undo.RecordObject(buildSetup, "Rearranged Build Entry down");
+                                buildSetup.rearrangeBuildSetupEntry(b, false);
+                            }
+                        }
+
                         GUI.backgroundColor = Color.red;
                         if (GUILayout.Button(new GUIContent("x", "Deletes Build Entry"), GUILayout.ExpandWidth(false)))
                         {
