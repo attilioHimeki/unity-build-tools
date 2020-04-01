@@ -14,3 +14,7 @@ Using this tool, all the setup work will be done just once, and the necessary bu
 ## Command-Line
 
 The tool includes Shell and Bash scripts to create builds via CLI, allowing easy integration to Jenkins, Travis and other CI/CD build systems.
+
+## Usage and license
+While I'm mostly using this for internal development, you're more than welcome to use this in your Unity project, following the conditions and limitations specified in the LICENSE. 
+Also, while not necessary, please make sure to credit me and send your feedback.
