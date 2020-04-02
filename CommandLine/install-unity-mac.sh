@@ -17,22 +17,12 @@ UNITY_DOWNLOAD_DIR="$HOME/Downloads/unity_downloads"
 DEFAULT_UNITY_INSTALL_FOLDER="/Applications/Unity"
 CHANGESETS_TEXT_FILE_PATH="$SCRIPTPATH/unity-download-changesets.txt"
 
+CHANGESET=""
+VERSION=$1
+
 install_unity() 
 {
-	VERSION=$1
-    PACKAGE_SUFFIX=$2
-    
-    CHANGESET_SEARCH_RESULT="$(grep $VERSION $CHANGESETS_TEXT_FILE_PATH)"
-    ENTRIES="$(echo $CHANGESET_SEARCH_RESULT | grep -o ':' | wc -l)"
-    
-    if [ $ENTRIES != 1 ] ; then
-        echo "Unity version not found, or ambiguous. Please specify a valid version from the changesets file. Aborting..."
-        exit 1
-    fi
-        
-    #Set version from file, just in case the user forgot to add the last part, for example f1
-    VERSION="$(cut -f1 -d ":" <<< $CHANGESET_SEARCH_RESULT)"
-    CHANGESET="$(cut -d ":" -f2- <<< $CHANGESET_SEARCH_RESULT)"
+    PACKAGE_SUFFIX=$1
     
     URL=$BASE_URL$CHANGESET$PACKAGE_SUFFIX$VERSION$EXTENSION
 	download_package $URL
@@ -48,7 +38,7 @@ install_unity()
 
 download_package() 
 {
-	URL=$1
+    URL=$1
     
     #Example URL: https://download.unity3d.com/download_unity/787658998520/MacEditorInstaller/Unity-2018.2.0f2.pkg
     
@@ -65,9 +55,24 @@ download_package()
 	fi
 }
 
+extract_changeset()
+{
+    CHANGESET_SEARCH_RESULT="$(grep $VERSION $CHANGESETS_TEXT_FILE_PATH)"
+    ENTRIES="$(echo $CHANGESET_SEARCH_RESULT | grep -o ':' | wc -l)"
+    
+    if [ $ENTRIES != 1 ] ; then
+        echo "Unity version not found, or ambiguous. Please specify a valid version from the changesets file. Aborting..."
+        exit 1
+    fi
+        
+    #Set version again from file, just in case the user forgot to add the last part, for example f1
+    VERSION="$(cut -f1 -d ":" <<< $CHANGESET_SEARCH_RESULT)"
+    CHANGESET="$(cut -d ":" -f2- <<< $CHANGESET_SEARCH_RESULT)"
+}
 
 #TODO: Allow choosing platform packages
-echo "Installing Unity v. $1..."
-install_unity $1 $EDITOR_PACKAGE_SUFFIX
-echo "Installing Android support for Unity v. $1..."
-install_unity $1 $ANDROID_TARGET_PACKAGE_SUFFIX
+extract_changeset
+echo "Installing Unity v. $VERSION..."
+install_unity $EDITOR_PACKAGE_SUFFIX
+echo "Installing Android support for Unity v. $VERSION..."
+install_unity $ANDROID_TARGET_PACKAGE_SUFFIX
