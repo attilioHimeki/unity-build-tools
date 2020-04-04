@@ -109,17 +109,7 @@ namespace Himeki.Build
 
         public static void BuildWithArgs()
         {
-            var args = System.Environment.GetCommandLineArgs();
-
-            string buildFilePath = string.Empty;
-            for (int i = 0; i < args.Length; i++)
-            {
-                if (args[i] == BUILD_FILE_RELATIVE_PATH_ARG)
-                {
-                    buildFilePath = args[i + 1];
-                    break;
-                }
-            }
+            string buildFilePath = CLIUtils.GetCommandLineArg(BUILD_FILE_RELATIVE_PATH_ARG);
 
             if (!string.IsNullOrEmpty(buildFilePath))
             {
@@ -130,5 +120,6 @@ namespace Himeki.Build
                 UnityEngine.Debug.LogError("Cannot find build setup path, make sure to specify using " + BUILD_FILE_RELATIVE_PATH_ARG);
             }
         }
+
     }
 }
