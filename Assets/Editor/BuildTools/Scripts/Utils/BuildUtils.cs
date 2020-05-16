@@ -21,7 +21,13 @@ namespace Himeki.Build
                 buildPlayerOptions.scenes = setupEntry.customScenes.ToArray();
             }
 
-            buildPlayerOptions.locationPathName = rootDirPath + "/" + setupEntry.buildName;
+            var pathName = rootDirPath + "/" + setupEntry.buildName;
+            if(setupEntry.target == BuildTarget.StandaloneWindows || setupEntry.target == BuildTarget.StandaloneWindows64)
+            {
+                pathName += ".exe";
+            }
+            buildPlayerOptions.locationPathName = pathName;
+            
 
             if (!string.IsNullOrEmpty(setupEntry.assetBundleManifestPath))
             {
