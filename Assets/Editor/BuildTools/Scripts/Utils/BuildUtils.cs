@@ -6,6 +6,7 @@ namespace Himeki.Build
     {
 
         public const string SETUPS_REL_DIRECTORY = "Assets/Editor/BuildTools/";
+        private const string WINDOWS_EXTENSION = ".exe";
         public static BuildPlayerOptions getBuildPlayerOptionsFromBuildSetupEntry(BuildSetupEntry setupEntry, string rootDirPath, string[] defaultScenes)
         {
             var buildPlayerOptions = new BuildPlayerOptions();
@@ -24,7 +25,10 @@ namespace Himeki.Build
             var pathName = rootDirPath + "/" + setupEntry.buildName;
             if(setupEntry.target == BuildTarget.StandaloneWindows || setupEntry.target == BuildTarget.StandaloneWindows64)
             {
-                pathName += ".exe";
+                if(!pathName.Contains(WINDOWS_EXTENSION))
+                {
+                    pathName += WINDOWS_EXTENSION;
+                }
             }
             buildPlayerOptions.locationPathName = pathName;
             
