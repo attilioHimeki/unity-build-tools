@@ -313,8 +313,10 @@ namespace Himeki.Build
 
                 if (b.target == BuildTarget.Android)
                 {
+                    #if UNITY_2017_4_OR_NEWER
                     b.androidAppBundle = EditorGUILayout.Toggle("Build Android App Bundle", b.androidAppBundle);
                     b.androidArchitecture = (AndroidArchitecture)EditorGUILayout.EnumPopup("Android Architecture", b.androidArchitecture);
+                    #endif
                 }
 
                 if(b.target == BuildTarget.PS4)
@@ -329,6 +331,7 @@ namespace Himeki.Build
 
         private void drawVRSectionGUI(BuildSetupEntry b)
         {
+            #if UNITY_2017_2_OR_NEWER
             var targetGroup = BuildPipeline.GetBuildTargetGroup(b.target);
             if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
             {
@@ -354,6 +357,7 @@ namespace Himeki.Build
                     }
                 }
             }
+            #endif
         }
 
         private void buildGame()

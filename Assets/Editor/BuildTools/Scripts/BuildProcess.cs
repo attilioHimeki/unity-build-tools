@@ -39,6 +39,7 @@ namespace Himeki.Build
                     PlayerSettings.SetManagedStrippingLevel(targetGroup, setup.strippingLevel);
 #endif
 
+#if UNITY_2017_2_OR_NEWER
                     if(VRUtils.targetGroupSupportsVirtualReality(targetGroup))
                     {
                         PlayerSettings.SetVirtualRealitySupported(targetGroup, setup.supportsVR);
@@ -52,11 +53,14 @@ namespace Himeki.Build
                     {
                         PlayerSettings.SetVirtualRealitySupported(targetGroup, false);
                     }
+#endif
 
                     if (target == BuildTarget.Android)
                     {
+                        #if UNITY_2017_4_OR_NEWER
                         EditorUserBuildSettings.buildAppBundle = setup.androidAppBundle;
                         PlayerSettings.Android.targetArchitectures = setup.androidArchitecture;
+                        #endif
                     }
 
                     if(target == BuildTarget.PS4)
@@ -73,9 +77,9 @@ namespace Himeki.Build
                     var success = (buildSummary.result == BuildResult.Succeeded);
                     UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Status: " + buildSummary.result);
 #else
-                var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
-                var success = string.IsNullOrEmpty(result);
-                UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Success: " + success);
+                    var result = BuildPipeline.BuildPlayer(buildPlayerOptions);
+                    var success = string.IsNullOrEmpty(result);
+                    UnityEngine.Debug.Log("Build " + setup.buildName + " ended with Success: " + success);
 #endif
 
                     // Revert group build player settings after building

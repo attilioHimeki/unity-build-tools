@@ -30,9 +30,13 @@ namespace Himeki.Build
 
         //iOS
         public bool iosSymlinkLibraries = false;
+
         //Android
+#if UNITY_2017_4_OR_NEWER
         public bool androidAppBundle = false;
         public AndroidArchitecture androidArchitecture;
+#endif
+
         //PS4
         public PS4BuildSubtarget ps4BuildSubtarget;
         public PS4HardwareTarget ps4HardwareTarget;
