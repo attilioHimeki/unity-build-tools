@@ -16,7 +16,7 @@ Using this tool, all the setup work will be done just once, and the necessary bu
 ## Advanced Features
 
 ### Addressables
-The tool includes support to rebuild addressables, per-build. Since Unity doesn't provide a reliable way to detect if the Addressables package is installed in your editor, in order to enable this you'll need to add ADDRESSABLES to your Scripting Define Symbols.
+The tool includes support to rebuild addressables, per-build. Since Unity doesn't provide a reliable way to detect if the Addressables package is installed in your editor, in order to show this option this you'll need to add ADDRESSABLES to your Scripting Define Symbols. Then, you can enable it in the Advanced Options of each build.
 
 ### Command-Line
 
