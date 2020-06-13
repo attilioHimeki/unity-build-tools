@@ -296,6 +296,10 @@ namespace Himeki.Build
             {
                 EditorGUI.indentLevel++;
 
+#if UNITY_2020_1_OR_NEWER
+                b.detailedBuildReport = EditorGUILayout.Toggle("Detailed Build Report", b.detailedBuildReport);
+#endif
+
 #if UNITY_2018_3_OR_NEWER
                 b.strippingLevel = (ManagedStrippingLevel)EditorGUILayout.EnumPopup("Stripping Level", b.strippingLevel);
 #endif

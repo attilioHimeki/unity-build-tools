@@ -27,6 +27,9 @@ namespace Himeki.Build
         public ScriptingImplementation scriptingBackend = ScriptingImplementation.IL2CPP;
         public string assetBundleManifestPath = "";
         public bool strictMode = false;
+#if UNITY_2020_1_OR_NEWER
+        public bool detailedBuildReport = false;
+#endif
 
         //iOS
         public bool iosSymlinkLibraries = false;

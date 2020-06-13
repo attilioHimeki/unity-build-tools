@@ -57,6 +57,13 @@ namespace Himeki.Build
                 }
             }
 
+#if UNITY_2020_1_OR_NEWER
+            if(setupEntry.detailedBuildReport)
+            {
+                buildOptions |= BuildOptions.DetailedBuildReport;
+            }
+#endif
+
             buildPlayerOptions.options = buildOptions;
 
             return buildPlayerOptions;
