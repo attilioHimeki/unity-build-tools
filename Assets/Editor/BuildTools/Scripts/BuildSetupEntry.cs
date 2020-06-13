@@ -31,6 +31,10 @@ namespace Himeki.Build
         public bool detailedBuildReport = false;
 #endif
 
+#if ADDRESSABLES
+        public bool rebuildAddressables = false;
+#endif
+
         //iOS
         public bool iosSymlinkLibraries = false;
 

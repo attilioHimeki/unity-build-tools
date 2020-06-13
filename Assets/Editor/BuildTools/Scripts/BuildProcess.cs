@@ -2,8 +2,14 @@ using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
 using System.Diagnostics;
+
 #if UNITY_2018_1_OR_NEWER
 using UnityEditor.Build.Reporting;
+#endif
+
+#if ADDRESSABLES
+using UnityEditor.AddressableAssets;
+using UnityEditor.AddressableAssets.Settings;
 #endif
 
 namespace Himeki.Build
@@ -68,6 +74,14 @@ namespace Himeki.Build
                         EditorUserBuildSettings.ps4HardwareTarget = setup.ps4HardwareTarget;
                         EditorUserBuildSettings.ps4BuildSubtarget = setup.ps4BuildSubtarget;
                     }
+
+#if ADDRESSABLES
+                    if(setup.rebuildAddressables)
+                    {
+                        AddressableAssetSettings.CleanPlayerContent(AddressableAssetSettingsDefaultObject.Settings.ActivePlayerDataBuilder);
+                        AddressableAssetSettings.BuildPlayerContent();
+                    }
+#endif
 
                     var buildPlayerOptions = BuildUtils.getBuildPlayerOptionsFromBuildSetupEntry(setup, path, defaultScenes);
 
