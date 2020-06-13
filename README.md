@@ -9,7 +9,9 @@ Normally, for each build you'd need to switch platform, change the scripting def
 
 Using this tool, all the setup work will be done just once, and the necessary builds will be generated just by pressing a button, with no further input required.
 
-<p align="center"><img src="https://user-images.githubusercontent.com/4165016/77833524-52d7b200-713e-11ea-930c-073ccda68001.png" width="80%" max-width:600px></p>
+<div style="float: right">
+<img src="https://user-images.githubusercontent.com/4165016/77833524-52d7b200-713e-11ea-930c-073ccda68001.png" width="50%" max-width:400px>
+</div>
 
 ## Command-Line
 
