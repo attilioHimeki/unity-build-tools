@@ -53,7 +53,12 @@ namespace Himeki.Build
             {
                 if (setupEntry.iosSymlinkLibraries)
                 {
+//Todo: Need to find specific version when this was changed
+#if UNITY_2021_1_OR_NEWER
+                    buildOptions |= BuildOptions.SymlinkSources;
+#else
                     buildOptions |= BuildOptions.SymlinkLibraries;
+#endif
                 }
             }
 
