@@ -1,6 +1,7 @@
 *.csproj
 *.sln
 .vscode/settings.json
+.vs
 Library
 Temp
 obj
@@ -9,3 +10,4 @@ ProjectSettings
 .DS_Store
 Logs
 UnityPackageManager
+UserSettings
