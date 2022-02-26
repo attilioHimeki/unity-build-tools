@@ -351,7 +351,7 @@ namespace Himeki.Build
                     {
                         EditorGUI.indentLevel++;
 
-                        var vrSdks = PlayerSettings.GetAvailableVirtualRealitySDKs(targetGroup);
+                        var vrSdks = VRUtils.getAvailableVRSdks(targetGroup);
                         if (vrSdks.Length > 0)
                         {
                             b.vrSdkFlags = EditorGUILayout.MaskField("VR SDKs", b.vrSdkFlags, vrSdks);

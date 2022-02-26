@@ -28,8 +28,8 @@ namespace Himeki.Build
 
 #if UNITY_2017_2_OR_NEWER
             vrSupported = PlayerSettings.GetVirtualRealitySupported(targetGroup);
-            vrSdks = PlayerSettings.GetVirtualRealitySDKs(targetGroup);
 #endif
+            vrSdks = VRUtils.getAvailableVRSdks(targetGroup);
 
 #if UNITY_2017_4_OR_NEWER
             androidAppBundleEnabled = EditorUserBuildSettings.buildAppBundle;
