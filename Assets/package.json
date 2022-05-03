@@ -1,0 +1,9 @@
+{
+    "name": "himeki.buildtools",
+    "displayName": "Unity Build Tools",
+    "version": "0.0.0",
+    "unity": "2022.2",
+    "category": "Build",
+    "dependencies": {
+    }
+}
